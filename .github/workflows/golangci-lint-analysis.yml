@@ -1,0 +1,39 @@
+# https://github.com/golangci/golangci-lint-action#how-to-use
+# best to use only for pull requests
+
+name: GolangCI-Lint
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'src/**'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+
+    env:
+      source-directory: 'src/'
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Run Security Scan
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: latest
+        working-directory: ${{ env.source-directory }}
+        # comment/uncomment to avoid failing the scan
+        # args: --issues-exit-code=0
+        skip-pkg-cache: true
+        skip-build-cache: true
